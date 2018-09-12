@@ -1,0 +1,208 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{babel}
+\usepackage{float}
+\usepackage[numbers]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=true,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+\begin{document}
+
+\title{Deep learning for climate modeling\\
+Week 2: A data-driven approach to convective parametrization}
+
+\maketitle
+Presenters: Pierre Gentine and Mike Pritchard
+
+Notes takes by: Tom Beucler
+
+\bigskip{}
+
+
+\tableofcontents{}
+
+\pagebreak{}
+
+
+\section{What is a convective parametrization?}
+
+A model aimed at getting the cloud-scale mass flux profile and the
+corresponding turbulent tracer transport (e.g. turbulent vertical
+heat flux $\overline{w\prime T\prime},\ $where $w\prime\ $is vertical
+velocity turbulent anomaly and $T\prime\ $is temperature turbulent
+anomaly). Typical convective parametrizations rely on a lot of assumptions:
+\begin{itemize}
+\item Specify mass flux at cloud base
+\item Specify entrainment and detrainment profiles
+\item Invoke a quasi-equilibrium assumption
+\item Based on a connection between boundary layer and convection. 
+\item Can then add a triggering function preventing convection from triggering
+every time the static stability is negative (e.g. over land)
+\end{itemize}
+Pathologies of man-made convective parametrizations:
+\begin{itemize}
+\item {[}Bechtold et al., 2014{]} Problem of diurnal precipitation peak
+over land (e.g. peak too early, no late-night convection)
+\item {[}Couvreux et al., 2015{]} Bias in the convective heating profile.
+\item Other problems include convective memory and short-time scale behavior.
+\item Quasi-equilibrium closure imposes too short timescales over land.
+\item Entrainment depends on environmental conditions in practice, for instance
+would increase when relative humidity increases in reality. 
+\item Furthermore, entrainment is a stochastic process (dependence on stochastic
+mixing rather than solely cloud base conditions, since the memory
+of cloud base conditions is quickly lost).
+\item Convective parametrizations tend to trigger convection too frequently
+and too little (``drizzle problem''), which means that precipitation
+extremes are ill-resolved (typically top 1\% precipitation extremes).
+\item Cannot simulate mesoscale convective systems, which are mesoscale
+(\textasciitilde{}100km) precipitation clusters that bring most of
+the high-impact precipitation events.
+\item When the atmosphere precipitates, some of the precipitation re-evaporates,
+which cools the atmosphere and triggers gravity currents. These gravity
+currents can trigger convection remotely and therefore organize convection.
+\end{itemize}
+Although progress can be made by introducing a lag in the response
+of the boundary layer or parametrizing cold pools, the limits of convective
+parametrizations limit our ability to predict the changes in cloud
+radiative effects and precipitation with climate, even in an aquaplanet
+configuration {[}e.g. Stevens, Bony 2013{]}. These limitations impede
+our ability to predict regional climate change.
+
+
+\section{Super-parametrization of convection}
+
+
+\subsection{Cloud-permitting models}
+
+Cloud-permitting models (\textasciitilde{}1-10km horizontal resolution)
+can resolve convective processes, and therefore correct many of the
+biases intrinsic to convective parametrizations. Examples include:
+\begin{enumerate}
+\item The diurnal cycle of precipitation over the Amazon (convective parametrizations
+typically underestimate the precipitation intensity in this case) 
+\item Captures the magnitude of surface precipitation extremes in mid-latitudes
+(e.g. Oklahoma)
+\end{enumerate}
+
+\subsection{What is super parametrization?}
+
+It is possible to embed two-dimensional cloud-permitting models in
+global climate models to better resolve the convection-equilibrated
+thermodynamic tendencies. This considerably reduces the biases in
+moist large-scale circulations as well as precipitation patterns (macro-statistics
+of convection). However, certain aspects of convection, such as momentum
+transport, cannot be represented because the embedded cloud-permitting
+model is not three-dimensional. Because the macro-statistics are better
+represented, mesoscale radiation patterns, cold pools, etc. can be
+studied in the context of climate models.
+
+
+\subsection{Limits of super-parametrization}
+
+Because the cloud-permitting model is doubly periodic, it cannot properly
+simulate mesoscale disturbances such as mesoscale convective complexes,
+but they can resolve the winds necessary to advect them. Furthermore,
+they are very expensive (more than 100 times the cost of a regular
+global climate model).
+
+
+\section{A data-driven approach: Machine learning to represent convection}
+
+
+\subsection{Setup}
+
+The idea is to use the wealth of data available from super-parametrized
+global climate models to train a network that takes as inputs:
+\begin{itemize}
+\item The temperature profile
+\item The specific humidity profile
+\item The surface pressure
+\item The surface enthalpy fluxes
+\item The top-of-the-atmosphere shortwave radiative flux
+\end{itemize}
+and predicts the physical tendencies due to convection as outputs:
+\begin{itemize}
+\item The temperature tendency profile due to both convection and radiation
+\item The moisture tendency profile
+\item The precipitation
+\item The top-of-the-atmosphere radiative flux
+\end{itemize}
+The cost function during the training phase is the mean square error
+of the output vector.
+
+
+\subsection{Results using the super-parametrized community atmospheric model}
+
+The mesoscale precipitation and circulation features are well reproduced,
+as well as the heating and moistening profiles. Once embedded in the
+climate model to parametrize convection, the neural network decreases
+the exaggerated Kelvin wave signal and has a good Madden-Julian Oscillation
+signal.
+
+
+\subsection{Predictive abilities}
+
+Although the initial aquaplanet training data set did not have any
+longitudinal asymmetry, the neural network was able to predict a Walker
+circulation once zonal asymmetries were introduced. Furthermore, the
+neural net parametrization also significantly reduces the double Inter-Tropical
+Convergence Zone (ITCZ) bias. 
+
+There are limitations if the neural net is out of its training dataset:
+For instance, if trained on past climates, it cannot reproduce the
+future (+1K,+2K,+3K,+4K) climates (e.g. double ITCZ, etc.). If trained
+on the past (+0K) and future (+4K) climate, then it can properly interpolate
+in between (+1K,+2K,+3K).
+
+In conclusion, it is possible to represent sub-grid scale processes
+given only coarse-grained values, although some of the stochastic
+variability is missing (e.g. problematic for weather predictions).
+
+
+\section{Story of the making/Discussion}
+
+
+\subsection{Neural network characteristics}
+\begin{itemize}
+\item The workflow evolved from the Tensorflow to the Keras library for
+the deep learning scripts
+\item Only requires 3-6 months of data to train the neural network, which
+opens the possibility of using large eddy simulation data to train
+even better neural network parametrizations
+\item $256\times8\ $layer neural network
+\item Using a convolution network did not improve the predictive abilities
+\item Non-dimensionalizing the data did not help either; the neural network
+seems to learn the non-dimensionalization by itself
+\item The cost function was simply the RMSE from the output vector
+\item Most of the results were insensitive to the output normalization decisions
+\item The learning rate was the most important hyper-parameter
+\end{itemize}
+
+\subsection{Neural-net global climate model performances}
+\begin{itemize}
+\item There is less and less skill near the surface as quantified by mean
+square error, but the neural-driven climate models produce reasonable
+signals when coupled one way with a land model.
+\item Conservation properties almost satisfied: the neural network seems
+to be able to ``learn'' physical laws to some extent
+\item Runs 20 times faster than the super-parametrized model
+\end{itemize}
+
+\subsection{Issues}
+\begin{itemize}
+\item Stability problems, especially when trying to extend to the 32 column
+version of SPCAM
+\end{itemize}
+
+\subsection{Future directions}
+\begin{itemize}
+\item Using three-dimensional data to train the network\end{itemize}
+
+\end{document}
