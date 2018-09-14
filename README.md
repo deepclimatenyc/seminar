@@ -44,6 +44,10 @@ General discussion:
 
 ## 2018-09-11: A data driven approach to convective parameterization
 
+Deep learning to represent subgrid processes in climate models
+Stephan Rasp, Michael S. Pritchard, Pierre Gentine
+Proceedings of the National Academy of Sciences Sep 2018, 201810286; DOI: [https://doi.org/10.1073/pnas.1810286115](10.1073/pnas.1810286115)
+
 Pierre Gentine, September 11, 2018
 
 ### Convective parametrization (based on Arakawa and Schubert’s idea):
