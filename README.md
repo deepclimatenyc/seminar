@@ -202,3 +202,8 @@ in machine learning model?
 
 Yu Huang
 
+# 2018-09-18: Data-driven discretization: a method for systematic coarse graining of partial differential equations
+
+Yohai Bar-Sinai, Stephan Hoyer, Jason Hickey, Michael P. Brenner
+
+<https://arxiv.org/abs/1808.04930>
