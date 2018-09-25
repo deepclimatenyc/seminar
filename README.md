@@ -210,6 +210,9 @@ Yohai Bar-Sinai, Stephan Hoyer, Jason Hickey, Michael P. Brenner
 
 # 2018-09-25: Accelerating eulerian fluid simulation with convolutional networks
 
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
 Tompson, J., Schlachter, K., Sprechmann, P., and Perlin, K. (2016).
 Accelerating eulerian fluid simulation with convolutional networks.
 arXiv preprint arXiv:1607.03597.
@@ -218,7 +221,7 @@ arXiv preprint arXiv:1607.03597.
 
 Tompson et al. propose a machine learning technique to solve the invicid-Euler equation:
 
-$$ \frac{\partial u}{\partial t} = - u \cdot \nabla u - \frac{1}{\rho} \nabla p + f $$
+$$\frac{\partial u}{\partial t} = - u \cdot \nabla u - \frac{1}{\rho} \nabla p + f$$
 
 $$\nabla \cdot u = 0$$
 
