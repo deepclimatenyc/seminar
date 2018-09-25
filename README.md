@@ -210,9 +210,6 @@ Yohai Bar-Sinai, Stephan Hoyer, Jason Hickey, Michael P. Brenner
 
 # 2018-09-25: Accelerating eulerian fluid simulation with convolutional networks
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-
-
 Tompson, J., Schlachter, K., Sprechmann, P., and Perlin, K. (2016).
 Accelerating eulerian fluid simulation with convolutional networks.
 arXiv preprint arXiv:1607.03597.
