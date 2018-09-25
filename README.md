@@ -7,29 +7,29 @@ Ling, J., Kurzawski, A., & Templeton, J. (2016).
 _Reynolds averaged turbulence modelling using deep neural networks with embedded invariance_.
 Journal of Fluid Mechanics, 807, 155-166. doi:[10.1017/jfm.2016.615](https://doi.org/10.1017/jfm.2016.615)
 
-Context (from Mu): Navier Stokes solution can be solved by 
+Context (from Mu): Navier Stokes solution can be solved by
 1. direct numerical simulation
 1.	large eddy simulation (spectral cascades)
-1.	Reynolds-averaged Navier Stokes (RANS) 
+1.	Reynolds-averaged Navier Stokes (RANS)
     1.	Eddy viscosity models of order 0, 1, and 2 (k-epsilon). The zero-order solutions are based upon the Boussinesq approximate
-        for turbulence. 
+        for turbulence.
     1.	Reynolds stress models that solve the time evolution of the Reynolds stress <ui’uj’>
     1.	Perhaps it is too complicated to explicitly solve the Reynolds stress evolution → development of algebraic stress models (ASM):
         <ui’uj’> = giTi in which Ti are a 10-tensor basis. This serves as a nice test model for machine learning in fluid dynamics as
         conservation laws are satisfied, no physical insight is needed; we simply want the best set of parameters gi.
 
-Overview (from Tom): 
+Overview (from Tom):
 In the article the Navier Stokes equation is solved in the Reynolds decomposition which employs a mean and perturbation to describe
 a flow. The shear and rotation tensors are non-dimensionalized with turbulent kinetic energy and turbulent dissipation energy.
 The notion of Galilean invariance states the solution of the flow must not be dependent on the orientation of the coordinates.
 
-Article discussion: 
+Article discussion:
 -	The author makes a large assumption in using the 5 invariants, i.e. that the flow is driven by eddies.
 -	Nine inputs are used in the MLP, exploiting some symmetries in the rotation and shear tensors.
 -	Did they really need 8 hidden layers for this system? How well could one do with just 2 layers?
   Or with a baseline linear or nonlinear model?
 -	Some discussion of their Bayesian optimization for 3 hyperparameters
-  (2 architectural -- number of nodes per layer + number of layers,1 for learning rate) 
+  (2 architectural -- number of nodes per layer + number of layers,1 for learning rate)
 -	They use root mean squared error for their cost function. Is RMSE the right metric?
   Could random search do as well or better? Could certain methods simply learn the cost function?
 -	Could they have had the same insight by simply augmenting their training data, i.e. rotating it many times to
@@ -207,3 +207,31 @@ Yu Huang
 Yohai Bar-Sinai, Stephan Hoyer, Jason Hickey, Michael P. Brenner
 
 <https://arxiv.org/abs/1808.04930>
+
+# 2018-09-25: Accelerating eulerian fluid simulation with convolutional networks
+
+Tompson, J., Schlachter, K., Sprechmann, P., and Perlin, K. (2016).
+Accelerating eulerian fluid simulation with convolutional networks.
+arXiv preprint arXiv:1607.03597.
+
+<https://cims.nyu.edu/%7Eschlacht/CNNFluids.htm>
+
+Tompson et al. propose a machine learning technique to solve the invicid-Euler equation:
+
+$$\frac{\partial u}{\partial t} = - u \cdot \nabla u - \frac{1}{\rho} \nabla p + f$$
+
+$$\nabla \cdot u = 0$$
+
+The motivation for this work is to improve computer graphic animations, but the method is applicable to more complicated forms of the Navier-Stokes equation.
+
+Traditionally, the equation can solved using the operator splitting method. The method boils down to 2 steps (see algorithm 1 in the paper for more details):
+1. Ignore pressure gradients and calculate the velocity at the next time step assuming only advection ($\frac{\partial u}{\partial t} = -u\cdot\nabla u$)
+2. "pressure projection" : solve the Poisson equation for $p_t$ and use this to update the velocity field: $u_t = u_{t-1} - \frac{1}{\rho} \nabla p_t$
+
+Exact solutions can be found using iterative methods such as Preconditioned Conjugate Gradient (PCG) or Jacobi method. These are iterative methods that only can be divergent if truncated before convergence is reached, leading to bad solutions. The method proposed by Tompson et al. uses an unsupervised learning method to update the velocity field. A convolution  network is used to estimate $p_t$. Instead of using training data, the method minimizes the divergence of the predicted velocity field. This is justified since the problem assumes a non-divergent field ($\nabla \cdot =0$).
+
+3D Smoke plumes were simulated using the proposed method and three other methods. PCG, Jacobi, and the proposed method can produce qualitatively similar results. The Jacobi method, when truncated early, has an elongated shape and produced high frequency noise. To test the stability of the methods, the authors calculated the mean of the velocity divergence (which should be nearly zero). The proposed method significantly outperforms the Jacobi Method
+
+In summary, the proposed method uses an unsupervised convolution network to solve the invicid-Euler equation. Although it does not guarantee an exact solution, it significantly out performs the Jacobi method and produces results similar to PCG, while being orders of magnitude faster.
+
+L. Gloege
