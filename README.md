@@ -235,3 +235,9 @@ Exact solutions can be found using iterative methods such as Preconditioned Conj
 In summary, the proposed method uses an unsupervised convolution network to solve the invicid-Euler equation. Although it does not guarantee an exact solution, it significantly out performs the Jacobi method and produces results similar to PCG, while being orders of magnitude faster.
 
 L. Gloege
+
+# 2018-10-02: Model-Free Prediction of Large Spatiotemporally Chaotic Systems from Data: A Reservoir Computing Approach
+
+Jaideep Pathak, Brian Hunt, Michelle Girvan, Zhixin Lu, and Edward Ott
+Phys. Rev. Lett. 120, 024102 – Published 12 January 2018
+<https://doi.org/10.1103/PhysRevLett.120.024102>
