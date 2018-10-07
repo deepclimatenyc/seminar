@@ -241,3 +241,9 @@ L. Gloege
 Jaideep Pathak, Brian Hunt, Michelle Girvan, Zhixin Lu, and Edward Ott
 Phys. Rev. Lett. 120, 024102 – Published 12 January 2018
 <https://doi.org/10.1103/PhysRevLett.120.024102>
+
+# 2018-10-09: Recurrent neural networks and empirical dynamical modeling to study non-linear dynamical systems
+
+D. Sussillo and O. Barak. Opening the Black Box: Low-dimensional dynamics in high-dimensional recurrent neural networks. Neural comput. 2013 25(3): 626-49. doi: 10.1162/NECO_a_00409. 
+and
+G. Sugihara, R. May, H. Ye, C.-h. Hsieh, E. Deyle, M. Fogarthy and S. Much. Deteching causality in complex ecosystems. Science. 2012 338(6106): 496-500. doi: 10.1126/science.1227079.
